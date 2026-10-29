@@ -1,0 +1,25 @@
+name: 'Setup NFD'
+
+runs:
+  using: 'composite'
+  steps:
+    - shell: bash
+      run: |
+        wget -O nfd.zip "https://github.com/horsicq/Nauz-File-Detector/releases/download/Beta/NauzFileDetector_win64_portable_1.0.0_x64.zip"
+        unzip nfd.zip -d nfd_dir
+        
+        BIN_FILE=$(find $(pwd)/nfd_dir -type f -name "nfdc*" | head -n 1)
+        
+        if [ -z "$BIN_FILE" ]; then
+          echo "nfdc.exe not found!"
+          exit 1
+        fi
+        
+        BIN_DIR=$(dirname "$BIN_FILE")
+        chmod +x "$BIN_FILE"
+        
+        if [ "$(basename "$BIN_FILE")" != "nfdc" ] && [ "$(basename "$BIN_FILE")" != "nfdc.exe" ]; then
+          ln -s "$BIN_FILE" "$BIN_DIR/nfdc"
+        fi
+        
+        echo "$BIN_DIR" >> $GITHUB_PATH

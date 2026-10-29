@@ -1,0 +1,22 @@
+name: Detect It Easy Scan
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup CDiE
+        uses: horsicq/gh_actions/detect-it-easy@main
+
+      - name: Check executable
+        run: |          
+          cdie ./example.exe
+
+# Add here additional code for example for output to json file

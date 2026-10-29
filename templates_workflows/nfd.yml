@@ -1,0 +1,22 @@
+name: Nauz File Detector Scan
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  analyze:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup CDiE
+        uses: horsicq/gh_actions/nauz-file-detector@main
+
+      - name: Check executable
+        run: |          
+          nfdc.exe ./example.exe
+
+# Add here additional code for example for output to json file

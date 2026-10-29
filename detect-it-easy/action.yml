@@ -1,0 +1,26 @@
+name: 'Setup CDiE'
+
+runs:
+  using: 'composite'
+  steps:
+    - shell: bash
+      run: |
+        wget -O cdie.zip "https://github.com/horsicq/CDiE/releases/download/Beta/cdie_ubuntu24_amd64_4.0.0.zip"
+        unzip cdie.zip -d cdie_dir
+        
+        ls -laR cdie_dir
+        
+        BIN_FILE=$(find $(pwd)/cdie_dir -type f \( -name "cdie*" -o -name "diec*" \) | head -n 1)
+        
+        if [ -z "$BIN_FILE" ]; then
+          exit 1
+        fi
+        
+        BIN_DIR=$(dirname "$BIN_FILE")
+        chmod +x "$BIN_FILE"
+        
+        if [ "$(basename "$BIN_FILE")" != "cdie" ]; then
+          ln -s "$BIN_FILE" "$BIN_DIR/cdie"
+        fi
+        
+        echo "$BIN_DIR" >> $GITHUB_PATH
